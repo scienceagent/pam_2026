@@ -1,5 +1,6 @@
 import 'package:flutter_svg/flutter_svg.dart';
 
+// Iconițele SVG din assets/icons, gata de pus în widget-uri.
 class AppIcons {
   static final String _path = 'assets/icons/';
 

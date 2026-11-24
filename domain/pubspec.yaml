@@ -1,0 +1,10 @@
+name: domain
+description: "Stratul Domain: entități, contractele repository-urilor și use case-uri. Dart pur, fără dependențe."
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dev_dependencies:
+  test: ^1.25.0

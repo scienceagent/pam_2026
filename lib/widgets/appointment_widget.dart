@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:test_pam/list_items/appointment_list_item.dart';
 import 'package:test_pam/resources/app_colors.dart';
 import 'package:test_pam/resources/app_icons.dart';
-import 'package:test_pam/resources/app_strings.dart';
 import 'package:test_pam/resources/app_text_styles.dart';
+import 'package:test_pam/widgets/app_network_image.dart';
 
-// Cardul "Appointment": card verde (data, ora) + card alb cu medicul care iese peste marginea de jos.
+// Desenează cardul programării curente (dată, oră, medic).
 class AppointmentWidget extends StatelessWidget {
   const AppointmentWidget({
     super.key,
@@ -16,27 +16,27 @@ class AppointmentWidget extends StatelessWidget {
   });
 
   final AppointmentListItem item;
-  final VoidCallback onTapDetails; // deschide pagina de detalii (Navigator.push în HealthHomePage)
+  final VoidCallback onTapDetails;
   final VoidCallback onTapEdit;
   final VoidCallback onTapMessage;
 
   @override
   Widget build(BuildContext context) {
     final appointment = item.appointment;
-    final whiteText = AppTextStyles.medium14.copyWith(color: AppColors.whiteColor); // copyWith: același stil, culoare albă
+    final whiteText = AppTextStyles.medium14.copyWith(color: AppColors.whiteColor);
 
-    return Padding( // Padding: 24px deasupra cardului
+    return Padding(
       padding: const EdgeInsets.only(top: 24),
-      child: SizedBox( // SizedBox: fixează înălțimea zonei la 198 (Stack-ul are nevoie de dimensiune)
+      child: SizedBox(
         height: 198,
-        child: Stack( // Stack: straturi suprapuse -> cardul alb stă PESTE cardul verde
+        child: Stack(
           children: [
-            Positioned( // Positioned: fixează copilul la coordonate în Stack
+            Positioned(
               left: 0,
               right: 0,
               top: 0,
               height: 173,
-              child: Container( // Container doar cu decorație: dreptunghiul verde cu colțuri rotunde
+              child: Container(
                 decoration: BoxDecoration(color: AppColors.coralGreen01, borderRadius: BorderRadius.circular(8)),
               ),
             ),
@@ -44,22 +44,22 @@ class AppointmentWidget extends StatelessWidget {
               left: 22,
               right: 22,
               top: 23,
-              child: Column( // Column: conținutul cardului verde, pe verticală
+              child: Column(
                 children: [
-                  InkWell( // InkWell: rândul "Appointment >" e clicabil
+                  InkWell(
                     onTap: onTapDetails,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // text stânga, săgeată dreapta
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppStrings.appointment,
+                          appointment.title,
                           style: AppTextStyles.medium12.copyWith(color: AppColors.whiteColor),
                         ),
                         AppIcons.arrowRightIcon,
                       ],
                     ),
                   ),
-                  SizedBox(height: 24), // SizedBox: spațiu vertical de 24px
+                  SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -69,14 +69,13 @@ class AppointmentWidget extends StatelessWidget {
                           Row(
                             children: [
                               AppIcons.calendarEditIcon,
-                              SizedBox(width: 8), // spațiu între iconiță și dată
+                              SizedBox(width: 8),
                               Text(appointment.date, style: whiteText),
                             ],
                           ),
-                          SizedBox(height: 12), // spațiu între dată și oră
+                          SizedBox(height: 12),
                           Row(
                             children: [
-                              // SizedBox 20x20 + Center: iconița ceasului centrată într-o cutie fixă
                               SizedBox(width: 20, height: 20, child: Center(child: AppIcons.clockIcon)),
                               SizedBox(width: 8),
                               Text(appointment.time, style: whiteText),
@@ -86,9 +85,9 @@ class AppointmentWidget extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: onTapEdit,
-                        customBorder: CircleBorder(), // ripple în formă de cerc
-                        child: Stack( // Stack: cercul și creionul suprapuse
-                          alignment: Alignment.center, // ambele centrate unul peste altul
+                        customBorder: CircleBorder(),
+                        child: Stack(
+                          alignment: Alignment.center,
                           children: [AppIcons.editCircle, AppIcons.editIcon],
                         ),
                       ),
@@ -97,33 +96,25 @@ class AppointmentWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned( // cardul alb cu medicul, pus mai jos -> iese peste marginea cardului verde
+            Positioned(
               left: 22,
               right: 22,
               top: 131,
-              child: Container( // Container: înălțime + padding + decorație (fundal alb, umbră)
+              child: Container(
                 height: 67,
                 padding: EdgeInsets.only(left: 13, right: 14),
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [BoxShadow(color: AppColors.cardShadow, offset: Offset(0, 8), blurRadius: 80)], // BoxShadow: umbra cardului
+                  boxShadow: [BoxShadow(color: AppColors.cardShadow, offset: Offset(0, 8), blurRadius: 80)],
                 ),
                 child: Row(
                   children: [
-                    ClipRRect( // ClipRRect: decupează copilul cu colțuri rotunjite (Rounded Rect)
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container( // Container gri 43x43 = fundal până se încarcă poza
-                        width: 43,
-                        height: 43,
-                        color: AppColors.imagePlaceholder,
-                        child: Image.asset(appointment.doctor.imagePath, fit: BoxFit.cover), // Image.asset: imagine din assets
-                      ),
-                    ),
-                    SizedBox(width: 12), // spațiu între poză și text
-                    Expanded( // Expanded: textul ia spațiul rămas, iconița de mesaj rămâne la dreapta
+                    AppNetworkImage(url: appointment.doctor.imageUrl, size: 43, radius: 8),
+                    SizedBox(width: 12),
+                    Expanded(
                       child: Column(
-                        mainAxisSize: MainAxisSize.min, // Column ocupă doar cât îi trebuie pe verticală
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(appointment.doctor.name, style: AppTextStyles.semiBold16),
@@ -132,7 +123,7 @@ class AppointmentWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    InkWell(onTap: onTapMessage, child: AppIcons.messageTextIcon), // iconiță clicabilă
+                    InkWell(onTap: onTapMessage, child: AppIcons.messageTextIcon),
                   ],
                 ),
               ),

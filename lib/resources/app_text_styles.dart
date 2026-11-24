@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_pam/resources/app_colors.dart';
 
+// Stilurile de text (font, mărime, grosime, culoare) folosite în aplicație.
 class FontsFamily {
   static String outfitRegular = 'OutfitRegular';
   static String outfitMedium = 'OutfitMedium';
@@ -10,7 +11,6 @@ class FontsFamily {
   static String openSansBold = 'OpenSansBold';
 }
 
-// Figma "Paragraph" styles; even leading spreads the line height above/below the text like Figma does.
 class AppTextStyles {
   static TextStyle semiBold14 = _style(FontsFamily.outfitSemiBold, 14, 1.3, AppColors.black01);
   static TextStyle semiBold16 = _style(FontsFamily.outfitSemiBold, 16, 1.3, AppColors.black01);
@@ -21,7 +21,6 @@ class AppTextStyles {
   static TextStyle regular12 = _style(FontsFamily.outfitRegular, 12, 1.8, AppColors.black03);
   static TextStyle regular14 = _style(FontsFamily.outfitRegular, 14, 1.8, AppColors.grey01);
 
-  // Appointment details screen (Open Sans, line height 100%, letter spacing -2%).
   static TextStyle titleBold26 = _style(FontsFamily.openSansBold, 26, 1, AppColors.primaryTeal, -0.52);
   static TextStyle bold22 = _style(FontsFamily.openSansBold, 22, 1, AppColors.blackColor);
   static TextStyle buttonBold22 = _style(FontsFamily.openSansBold, 22, 1, AppColors.whiteColor, -0.44);

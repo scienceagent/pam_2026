@@ -2,35 +2,37 @@
 
 Laborator la disciplina **Programarea Aplicațiilor Mobile** (2026). Aplicația reproduce în Flutter
 ecranele din macheta Figma „Laboratoare 2026 - V2”: pagina principală a unei aplicații medicale și
-pagina cu detaliile unei programări.
+pagina cu detaliile unei programări. Datele vin de la serviciul Web REST
+`https://test-api-jlbn.onrender.com/lab2026/v2/feed` și `.../feed/details` (GET, JSON).
 
 ## Ecrane
 
-- **Home** (`lib/health_home_page.dart`) — antet, căutare, servicii medicale, programarea curentă,
-  categorii (chips) și lista de medici.
-- **Detalii programare** (`lib/appointment_details_page.dart`) — profilul medicului și detaliile
-  programării; se deschide cu `Navigator.push` și se închide cu `Navigator.pop`.
+- **Home** (`lib/pages/home/`) — antet, căutare și filtre, programarea curentă, servicii
+  medicale, lista de medici; stări Loading / Error + Retry / Empty.
+- **Detalii programare** (`lib/pages/appointment_details/`) — profilul medicului, ore și
+  date selectabile; se deschide cu `Get.to` și se închide cu `Get.back`.
 
-## Structura proiectului
+## Structura proiectului (Clean Architecture)
 
 ```
-lib/
-├── main.dart                  # punctul de intrare
-├── test_pam_widget.dart       # MaterialApp
-├── health_home_page.dart      # ecranul principal
-├── appointment_details_page.dart
-├── models/                    # Appointment, Doctor, HealthService
-├── list_items/                # elementele listei (câte unul pe secțiune)
-├── widgets/                   # widget-urile care desenează fiecare secțiune
-└── resources/                 # culori, iconițe, imagini, texte, stiluri de text
-assets/
-├── fonts/                     # Outfit, Open Sans
-├── icons/                     # SVG
-└── images/
+domain/   Dart pur: entities/, repositories/ (contracte), use_cases/, errors/AppException
+data/     Retrofit + JSON: services/ (+ .g.dart), models/ (+ .g.dart), mappers/ (*_extension.dart), repositories/ (implementări)
+di/       get_it: di_data.dart (injectData) + di_domain.dart (injectDomain) leagă data și domain
+lib/      Presentation (Flutter + GetX)
+├── main.dart                  injectData() + injectDomain() + runApp
+├── test_pam_widget.dart       GetMaterialApp
+├── base/                      BaseGetXController (Loading / Error)
+├── pages/
+│   ├── home/                  HomeController + HealthHomePage
+│   └── appointment_details/   AppointmentDetailsController + AppointmentDetailsPage
+├── list_items/                rândurile listelor
+├── widgets/                   componente UI reutilizabile
+└── resources/                 culori, iconițe, texte, stiluri
+assets/   fonts/, icons/ (SVG)
+test/     teste cu un server fals (helpers/fake_server.dart, fixtures/*.json)
 ```
 
-Ecranele sunt construite dintr-o listă de `ListItem`-uri; fiecare tip de element are widget-ul său
-în `widgets/`.
+Aplicația depinde doar de `domain` și `di`, nu și de `data`.
 
 ## Rulare
 
@@ -41,12 +43,19 @@ flutter pub get
 flutter run
 ```
 
-Teste: `flutter test`
+Teste:
+
+```bash
+flutter test                          # aplicația (din rădăcina proiectului)
+cd domain; dart test; cd ..           # Domain
+cd data; dart test; cd ..             # Data
+cd data; dart run build_runner build --delete-conflicting-outputs; cd ..   # regenerează *.g.dart
+```
 
 ## Dependențe
 
-- [`flutter_svg`](https://pub.dev/packages/flutter_svg) — afișarea iconițelor SVG
-- `cupertino_icons`
+- `get` (GetX), `get_it` (DI), `flutter_svg`
+- `data`: `dio`, `json_annotation`; dev: `json_serializable`, `build_runner`
 
 ## Autor
 

@@ -3,7 +3,7 @@ import 'package:test_pam/list_items/chips_list_item.dart';
 import 'package:test_pam/resources/app_colors.dart';
 import 'package:test_pam/resources/app_text_styles.dart';
 
-// Secțiune cu titlu + listă orizontală de chip-uri selectabile ("Working Hours", "Date").
+// Desenează un grup de chip-uri selectabile; chip-ul ales e colorat.
 class ChipsSectionWidget extends StatelessWidget {
   const ChipsSectionWidget({
     super.key,
@@ -19,48 +19,49 @@ class ChipsSectionWidget extends StatelessWidget {
   final double topSpacing;
   final List<double> chipWidths;
   final List<double> chipLeftPaddings;
-  final Function(int index) onSelect; // anunță pagina ce chip s-a ales; pagina face setState
+  final Function(int index) onSelect;
   final VoidCallback onTapAction;
 
   @override
   Widget build(BuildContext context) {
-    return Padding( // Padding: spațiu deasupra secțiunii
+    return Padding(
       padding: EdgeInsets.only(top: topSpacing),
-      child: Column( // Column: titlul deasupra, chip-urile dedesubt
+      child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 26.7, right: 23.3),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // titlu stânga, "See All" dreapta
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(item.title, style: AppTextStyles.sectionSemiBold22),
-                if (item.rightActionTitle != null) // collection-if
-                  InkWell( // InkWell: "See All" clicabil
+                if (item.rightActionTitle != null)
+                  InkWell(
                     onTap: onTapAction,
                     child: Text(item.rightActionTitle!, style: AppTextStyles.actionRegular16),
                   ),
               ],
             ),
           ),
-          SizedBox(height: 26), // SizedBox fără copil: spațiu vertical de 26px
-          SizedBox( // SizedBox cu copil: fixează înălțimea listei orizontale la 56 (altfel ListView nu știe cât de înalt e)
+          SizedBox(height: 26),
+          SizedBox(
             height: 56,
-            child: ListView.separated( // ListView.separated: listă derulabilă cu separator între elemente
-              scrollDirection: Axis.horizontal, // derulare pe orizontală
-              padding: EdgeInsets.symmetric(horizontal: 26.7), // același padding stânga și dreapta
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 26.7),
               itemCount: item.chips.length,
-              separatorBuilder: (context, index) => SizedBox(width: 15), // separator: spațiu de 15px între chip-uri
-              itemBuilder: (context, index) { // construiește chip-ul de pe poziția index
+              separatorBuilder: (context, index) => SizedBox(width: 15),
+              itemBuilder: (context, index) {
                 final isSelected = index == item.selectedIndex;
-                return InkWell( // InkWell: chip-ul e clicabil
+                return InkWell(
                   onTap: () => onSelect(index),
                   borderRadius: BorderRadius.circular(10),
-                  child: Container( // Container: lățime, padding, fundal colorat și colțuri rotunde
-                    alignment: Alignment.centerLeft, // textul centrat vertical, lipit la stânga
-                    width: chipWidths[index],
-                    padding: EdgeInsets.only(left: chipLeftPaddings[index]),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: chipWidths.elementAtOrNull(index),
+                    padding: EdgeInsets.symmetric(horizontal: chipLeftPaddings.elementAtOrNull(index) ?? 24)
+                        .copyWith(right: index < chipWidths.length ? 0 : null),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primaryTeal : AppColors.chipBackground, // operator ternar: teal dacă e selectat
+                      color: isSelected ? AppColors.primaryTeal : AppColors.chipBackground,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(

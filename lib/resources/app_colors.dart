@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+// Culorile aplicației (din macheta Figma).
 class AppColors {
   static Color black01 = Color(0xff191D31);
   static Color black03 = Color(0xff8C8E98);

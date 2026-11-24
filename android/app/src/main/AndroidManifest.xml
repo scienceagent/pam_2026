@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Cereri HTTP către serviciul Web (debug are permisiunea implicit, release nu). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="test_pam"
         android:name="${applicationName}"

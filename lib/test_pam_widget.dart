@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:test_pam/health_home_page.dart';
+import 'package:get/get.dart';
 import 'package:test_pam/resources/app_colors.dart';
+import 'package:test_pam/pages/home/health_home_page.dart';
 
-// Widget-ul rădăcină al aplicației (pornit din main.dart cu runApp).
+// Widget-ul rădăcină: GetMaterialApp (necesar pentru GetX) cu ecranul principal.
 class TestPamWidget extends StatelessWidget {
   const TestPamWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // MaterialApp: configurează aplicația (temă, navigare, primul ecran)
-      debugShowCheckedModeBanner: false, // ascunde banda "DEBUG" din colț
-      home: Scaffold( // Scaffold: scheletul ecranului
+    return GetMaterialApp( // MaterialApp + GetX: permite Get.to / Get.back și gestionarea controllerelor
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
         backgroundColor: AppColors.whiteColor,
-        body: const SafeArea(bottom: false, child: HealthHomePage()), // SafeArea: evită notch-ul; jos lăsat liber
+        body: const SafeArea(bottom: false, child: HealthHomePage()),
       ),
     );
   }

@@ -1,0 +1,15 @@
+name: di
+description: "Dependency injection (get_it): leagă straturile Data și Domain; aplicația depinde doar de di și domain."
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  data:
+    path: ../data
+  domain:
+    path: ../domain
+  dio: ^5.9.0
+  get_it: ^8.0.0

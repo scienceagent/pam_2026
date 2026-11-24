@@ -1,46 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:test_pam/list_items/search_list_item.dart';
 import 'package:test_pam/resources/app_colors.dart';
 import 'package:test_pam/resources/app_icons.dart';
-import 'package:test_pam/resources/app_strings.dart';
 import 'package:test_pam/resources/app_text_styles.dart';
 
-// Bara de căutare: lupă + câmp de text + buton de filtrare.
+// Desenează câmpul de căutare și butonul de filtre (cu punct când sunt filtre active).
 class SearchWidget extends StatelessWidget {
-  const SearchWidget({super.key, required this.onSearch, required this.onTapFilter});
+  const SearchWidget({
+    super.key,
+    required this.item,
+    required this.controller,
+    required this.onSearch,
+    required this.onTapFilter,
+  });
 
-  final Function(String? text) onSearch; // callback cu parametru: primește textul scris
+  final SearchListItem item;
+  final TextEditingController controller;
+  final Function(String text) onSearch;
   final VoidCallback onTapFilter;
 
   @override
   Widget build(BuildContext context) {
-    return Padding( // Padding: spațiu de 24px deasupra barei
+    return Padding(
       padding: const EdgeInsets.only(top: 24),
-      child: Container( // Container: cutie cu înălțime, padding interior și decorație
+      child: Container(
         height: 52,
-        padding: EdgeInsets.only(left: 16, right: 16), // spațiu în INTERIORUL containerului
-        decoration: BoxDecoration( // BoxDecoration: culoare, chenar, colțuri rotunjite
+        padding: EdgeInsets.only(left: 16, right: 16),
+        decoration: BoxDecoration(
           color: AppColors.lightGrey03,
-          border: Border.all(color: AppColors.lightGrey02), // chenar pe toate laturile
-          borderRadius: BorderRadius.circular(15), // colțuri rotunjite cu raza 15
+          border: Border.all(color: AppColors.lightGrey02),
+          borderRadius: BorderRadius.circular(15),
         ),
-        child: Row( // Row: elemente pe orizontală
+        child: Row(
           children: [
-            AppIcons.searchIcon, // iconiță SVG lupă
-            SizedBox(width: 15), // SizedBox: spațiu fix de 15px
-            Expanded( // Expanded: câmpul de text ia tot spațiul rămas
-              child: TextField( // TextField: câmp în care utilizatorul scrie text
+            AppIcons.searchIcon,
+            SizedBox(width: 15),
+            Expanded(
+              child: TextField(
+                controller: controller,
                 style: AppTextStyles.regular14.copyWith(color: AppColors.black01),
                 cursorColor: AppColors.coralGreen01,
-                decoration: InputDecoration( // InputDecoration: hint, chenar etc. ale câmpului
-                  hintText: AppStrings.searchSomething, // textul gri afișat când câmpul e gol
+                decoration: InputDecoration(
+                  hintText: item.hint,
                   hintStyle: AppTextStyles.regular14,
-                  border: InputBorder.none, // fără linie/chenar implicit
-                  isCollapsed: true, // elimină padding-ul implicit al câmpului
+                  border: InputBorder.none,
+                  isCollapsed: true,
                 ),
-                onChanged: onSearch, // apelat la fiecare modificare a textului
+                onChanged: onSearch,
               ),
             ),
-            InkWell(onTap: onTapFilter, child: AppIcons.settingIcon), // InkWell: iconiță clicabilă
+            InkWell(
+              onTap: onTapFilter,
+              child: Badge(isLabelVisible: item.hasActiveFilters, backgroundColor: AppColors.coralGreen01, child: AppIcons.settingIcon),
+            ),
           ],
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:test_pam/list_items/list_item.dart';
-import 'package:test_pam/models/doctor.dart';
+import 'package:domain/entities/appointment_details.dart';
 
+// Rândul cu profilul medicului din pagina de detalii.
 class DoctorProfileListItem extends ListItem {
-  final Doctor doctor;
-  final String payment;
+  final AppointmentDetails details;
 
-  DoctorProfileListItem({required this.doctor, required this.payment});
+  DoctorProfileListItem({required this.details});
 }
