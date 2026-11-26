@@ -60,14 +60,14 @@ packages:
   data:
     dependency: transitive
     description:
-      path: data
+      path: "../data"
       relative: true
     source: path
     version: "1.0.0"
   di:
     dependency: "direct main"
     description:
-      path: di
+      path: "../di"
       relative: true
     source: path
     version: "1.0.0"
@@ -90,7 +90,7 @@ packages:
   domain:
     dependency: "direct main"
     description:
-      path: domain
+      path: "../domain"
       relative: true
     source: path
     version: "1.0.0"

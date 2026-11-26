@@ -39,9 +39,9 @@ dependencies:
   get_it: ^8.0.0
   # Clean Architecture: aplicația (Presentation) vede doar Domain și DI, nu și Data.
   domain:
-    path: ./domain
+    path: ../domain
   di:
-    path: ./di
+    path: ../di
 dev_dependencies:
   flutter_test:
     sdk: flutter
